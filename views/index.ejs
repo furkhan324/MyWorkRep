@@ -1,14 +1,26 @@
 <html>
-<head>
-  <title>Flapper News</title>
-  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
-  <script src="javascripts/angularApp.js"></script>
-  <style> .glyphicon-thumbs-up { cursor:pointer } </style>
+<head>
+    <title>RateMyRep</title>
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css" rel="stylesheet" />
+    <link href="http://www.bootstrapzero.com/css/styles.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" />
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+    <script src="javascripts/angularApp.js"></script>
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+    <style>
+        .glyphicon-thumbs-up {
+            cursor: pointer
+        }
+    </style>
 </head>
-<body ng-app="flapperNews">
+
+<body ng-app="flapperNews" class="grey lighten-4">
+    <!--
   <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl">
     <ul class="nav navbar-nav">
       <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
@@ -17,151 +29,412 @@
       <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
     </ul>
   </nav>
-  
-   <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <ui-view></ui-view>
+
+-->
+
+
+
+    <div ng-controller="NavCtrl">
+        <ul class="side-nav" id="mobile-nav">
+            <li><a href="#"><i class="mdi-navigation-more-horiz medium"></i></a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/bootstrap-templates">Votes</a></li>
+            <li><a href="/user">Profile</a></li>
+            <li><a class="modal-trigger" href="#modalContact">Contact</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+        <div id="nav" class="grey lighten-4">
+            <div class="container">
+               
+                <nav class="navbar-fixed flat grey lighten-4 purple-text" id="navBar">
+                    <div class="row nav-wrapper">
+                        <a href="/" class="brand-logo purple-text text-darken-2 truncate" title="A curation of free, responsive Bootstrap themes">Rate <span class="grey-text text-lighten-1 hide-on-small-only">Me!</span></a>
+                        <a class="brand-logo center hide-on-med-and-down dropdown-button small-text purple-text" href="#" data-activates="themesMenu">The Best Source for Customer Service Feedback</a>
+                        <a href="#" data-activates="mobile-nav" class="button-collapse black-text"><i class="mdi-navigation-menu"></i></a>
+                        <ul class="right hide-on-med-and-down">
+
+                            <li>
+                                <a class="dropdown-button" href="#!" data-activates="dropdownUser"> <img alt="profile image" class="favicon" src="http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png" title="furkhan324" /> </a>
+                            </li>
+
+                            <li><a href="#" data-activates="mobile-nav" class="purple-text"><i class="mdi-navigation-menu"></i></a></li>
+                        </ul>
+
+                        <ul id="dropdownUser" class="dropdown-content">
+                            <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
+                            <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+                            <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+                            <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+
+                        </ul>
+
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <nav class="container lighten-5 grey flat hide-on-med-and-down" id="navSearch">
+            <div class="row nav-wrapper">
+                <div class="s12 m4 l4 col">
+                    <form class="" action="/l">
+                        <div class="input-field" title="Search away...">
+                            <input id="q" name="q" type="search" required="" autofocus placeholder=" Search " class="validate">
+                            <label for="q"><a href onclick="document.forms[0].submit();return false;"><i class="mdi-action-search grey-text text-lighten-2"></i></a></label>
+                            <i class="mdi-navigation-close"></i>
+                        </div>
+                    </form>
+                </div>
+                <div class="s12 m8 l8 col right-align">
+                    <p class="purple-text">
+
+                    </p>
+                </div>
+            </div>
+        </nav>
     </div>
-  </div>
 
-  <script type="text/ng-template" id="/home.html">
-    <div class="page-header">
-      <h1>Flapper News</h1>
+
+    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
+
+    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
+
+
+
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <ui-view></ui-view>
+        </div>
     </div>
 
-    <div ng-repeat="post in posts | orderBy: '-upvotes'">
-      <span class="glyphicon glyphicon-thumbs-up" ng-click="upvote(post)"></span>
-        {{post.upvotes}}
-      <span class="glyphicon glyphicon-thumbs-down" ng-click="downvote(post)"></span>
-      <span style="font-size:20px;margin-left:10px">
-        <a ng-show="post.link" href="{{post.link}}">
-          {{post.title}}
-        </a>
-        <span ng-hide="post.link">
-          {{post.title}}
-        </span>
-		<span ng-show="post.author">
-		  posted by <a>{{post.author}}</a> |
-		</span>      
-	 </span>
-      <span>
-        <a href="#/posts/{{post._id}}">Comments</a>
-          ({{post.comments.length}})
-      </span>
-    </div>
+    <script type="text/ng-template" id="/home.html">
 
-    <form ng-submit="addPost()" ng-show="isLoggedIn()" style="margin-top:30px">
-      <h3>Add a new post:</h3>
+        <div id="main" class="">
+            <div class="container">
 
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Title"  ng-model="title">
-      </div>
 
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Link" ng-model="link">
-      </div>
+                <div class="row">
+                    <div class="m12 s12 col">
+                        <div id="featured"></div>
+                        <div class="row">
 
-      <button type="submit" class="btn btn-primary">Post</button>
-    </form>
-	<div ng-hide="isLoggedIn()">
-	  <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can add a post.</h3>
-	</div>
-  </script>
+                            <div ng-repeat="post in posts | orderBy: '-upvotes'">
 
-  <script type="text/ng-template" id="/posts.html">
-    <div class="page-header">
-      <h3>
-        <a ng-show="post.link" href="{{post.link}}">
-          {{post.title}}
-        </a>
-        <span ng-hide="post.link">
-          {{post.title}}
-        </span>
-      </h3>
-    </div>
 
-    <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
-      <span class="glyphicon glyphicon-thumbs-up" ng-click="upvote(comment)"></span>
-        {{comment.upvotes}} 
-      <span class="glyphicon glyphicon-thumbs-down" ng-click="downvote(comment)"></span>
-        - by {{comment.author}}
-      <span style="font-size:20px; margin-left:10px;">
+                                <div class="col s8 m4 l3 animated fadeInUp" style="-webkit-animation-duration:0ms">
+                                    <div class="card flat small">
+                                        <div class="card-image white darken-1">
+                                            <a href="#/posts/{{post._id}}"><img alt="" src="http://image.slidesharecdn.com/22flatbackgroundcolors-140206091312-phpapp01/95/22-flat-background-colors-for-your-presentation-ppt-template-6-638.jpg?cb=1393600937"></a>
+                                        </div>
+                                        <div class="card-content white">
+                                            <div class="card-title truncate">
+                                                <a href="#/posts/{{post._id}}" class="grey-text text-darken-3 truncate">{{post.name}}</a>
+                                            </div>
+                                            <a href="" class="right activator"><i class="mdi-navigation-arrow-forward grey-text small"></i></a>
+                                            <h6><a href="#/posts/{{post._id}}"  class="grey-text text-lighten-1">{{post.position}} @ {{post.location}}</a></h6>
+                                        </div>
+                        
+                                    </div>
+                                    <!--/card-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <br>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="l9 s9 col grey-text">
+                        <p class="flow-text cursive"></p>
+                    </div>
+                    <div class="l3 s3 col">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </script>
+
+    <script type="text/ng-template" id="/posts.html">
+        <div id="main" class="">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="s12 col grey-text text-lighten-1">
+                        <p class="right">
+
+                            <!-- BootStrapZero Right Side 336x280 -->
+
+
+                        </p>
+                        <h1>
+{{post.name}}                </h1>
+                        <h6>
+{{post.position}}                </h6>
+                    </div>
+                    <div class="s12 col">
+                        <div class="row">
+                            <div class="l8 m12 s12 col">
+                                <div class="row">
+                                    <div class="l4 m6 s12 col">
+                                        <p class="flow-text"><img alt="Profile Picture" src="https://thebenclark.files.wordpress.com/2014/03/facebook-default-no-profile-pic.jpg" class=" img-rounded responsive-img"></p>
+                                    </div>
+                                    <div class="l8 m6 s12 col">
+                                        <p class="flow-text"> {{post.desc}}</p>
+
+                                        <br />
+
+                                        <h6>How'd you like me?</h6>
+
+                                        <div id="stars-default">
+                                            <input type=hidden name "rating"/>
+                                        </div>
+
+
+                                        <br />
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="l12 m12 s12 col">
+
+                                        <a class="waves-effect waves-light btn-large blue btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
+                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Gratitude</span>
+                                        </a>
+                                        <a class="waves-effect waves-light btn-large orange btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
+                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Commendation</span>
+                                        </a>
+
+                                        <a class="waves-effect waves-light btn-large red btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
+                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Suggestion</span>
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="l12 m12 s12 col center">
+
+
+                                    </div>
+                                </div>
+                                <div>
+                                    <br/>
+                                </div>
+                                <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+                                    <span class="fa fa-thumbs-up" ng-click="upvote(comment)"></span> {{comment.upvotes}}
+                                    <span class="fa fa-thumbs-down" ng-click="downvote(comment)"></span> - by {{comment.author}}
+                                    <span style="font-size:20px; margin-left:10px;">
         {{comment.body}}
       </span>
+                                </div>
+
+                                <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin-top:30px;">
+                                    <h3>Add a new comment</h3>
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Post</button>
+                                </form>
+
+
+
+                                <div class="clearfix"></div>
+                                <h6>Share the Love</h6>
+                                <share-buttons networks="['facebook','twitter','gplus','buffer','reddit']" screen-name="bootstrapzero" share-text="Elate One Page HTML5 Bootstrap template" popup="'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=340,width=750'"></share-buttons>
+                                <div class="clearfix"></div>
+
+                            </div>
+                            <div class="l4 m12 s12 col">
+
+                                <div class="card-panel flat">
+                                    <h6>Profile</h6>
+                                    <ul>
+
+                                        <li>
+                                            <div class="divider grey lighten-2"></div>
+                                        </li>
+                                        <li style="margin-top:10px;">
+                                            <i style="  display:inline-block; " class="inline-block small mdi-action-account-circle left"></i> <span class="" style="">Name: {{post.name}}</span>
+
+                                        </li>
+                                        <li>
+                                            <i class="small mdi-image-timelapse left"></i> <span class="" style="">Since: {{post.since}}</span>
+
+                                        </li>
+                                        <li>
+                                            <i class="small mdi-maps-location-history left"></i> <span class="" style="">Position {{post.position}}</span>
+
+                                        </li>
+                                        <li>
+                                            <i class="small mdi-maps-place left"></i> <span class="" style="">Location {{post.location}}</span>
+
+                                        </li>
+
+
+
+                                    </ul>
+                                </div>
+                                <div style="height:300px;width:650px;max-width:100%;list-style:none; transition: none;overflow:hidden;">
+                                    <div id="gmap-display" style="height:100%; width:100%;max-width:100%;">
+                                        <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Macy's,+Newpark+Mall,+Newark,+CA,+United+States&key=AIzaSyAN0om9mFmy1QN6Wf54tXAowK4eT0ZUPrU"></iframe>
+                                    </div><a class="code-for-google-map" href="https://www.interserver-coupons.com" id="inject-map-data">InterserverCoupons</a>
+                                    <style>
+                                        #gmap-display img {
+                                            max-width: none!important;
+                                            background: none!important;
+                                        }
+                                    </style>
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="l9 s9 col grey-text">
+                        <p class="flow-text cursive"></p>
+                    </div>
+                    <div class="l3 s3 col">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </script>
+
+    <script type="text/ng-template" id="/register.html">
+        <div class="page-header">
+          
+        </div>
+
+        <div ng-show="error" class="alert alert-danger row">
+            <span>{{ error.message }}</span>
+        </div>
+
+        <form ng-submit="register()" style="margin-top:30px;">
+            <h3>Register</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" ng-model="user.username"></input>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" ng-model="user.password"></input>
+            </div>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Full name" ng-model="user.name"></input>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Where do you work?" ng-model="user.location"></input>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="What is your positon there?" ng-model="user.position"></input>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="When have you been working since?" ng-model="user.since"></input>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="A short description for your ratemyrep page" ng-model="user.desc"></input>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </script>
+
+
+    <script type="text/ng-template" id="/login.html">
+        <div class="page-header">
+        </div>
+
+        <div ng-show="error" class="alert alert-danger row">
+            <span>{{ error.message }}</span>
+        </div>
+
+        <form ng-submit="logIn()" style="margin-top:30px;">
+            <h3>Log In</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" ng-model="user.username"></input>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" ng-model="user.password"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+    </script>
+
+    <footer class="container">
+        <div class="row grey-text text-lighten-2">
+            <div class="s12 m6 l3 col">
+                <h6>Rate Me!</h6>
+                <ul class="nav">
+
+                    <li><a class="grey-text" href="/bootstrap-templates" rel="nofollow">What's New</a></li>
+                    <li><a class="grey-text" href="/#featured" rel="nofollow">Features</a></li>
+                    <li><a class="grey-text" href="/#featured" rel="nofollow">Policy</a></li>
+
+                </ul>
+            </div>
+            <div class="s12 m6 l3 col">
+                <h6>About</h6>
+                <ul class="nav">
+                    <li><a class="grey-text text-darken-1 modal-trigger" href="#modalContact">Contact Us</a></li>
+                    <li><a class="grey-text text-darken-1" href="/about">About</a></li>
+
+                    <li><a class="grey-text text-darken-1 modal-trigger" href="#modalSubmit">Suggestions?</a></li>
+
+                    <li><a class="grey-text text-darken-1" href="/legal">Terms &amp; Conditions</a></li>
+                </ul>
+            </div>
+
+            <div class="s12 m6 l3 col right-align">
+                <h6>Follow</h6>
+                <p>
+                    <a class="black-text" href="http://twitter.com/#" title="Follow us on Twitter"><i class="fa fa-4x fa-twitter"></i></a>
+                    <a class="black-text" href="//google.com/#" title="Follow on Google Plus"><i class="fa fa-4x fa-fw fa-google-plus"></i></a>
+                </p>
+            </div>
+        </div>
+        <!--/row-->
+    </footer>
+    <div class="section">
+        <div class="container">
+            <div class="row black-text">
+                <div class="m8 s6 col">
+                    &nbsp;
+                </div>
+                <div class="m4 s8 col right-align small-text grey-text text-lighten-1">
+                    RateMe! ©2016.
+                </div>
+            </div>
+        </div>
     </div>
 
-    <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin-top:30px;">
-      <h3>Add a new comment</h3>
+</body>
 
-      <div class="form-group">
-        <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Post</button>
-    </form>
-    <div ng-hide="isLoggedIn()">
-	  <h3>You need to <a href="/#/login">Log In</a> or <a href="/#/register">Register</a> before you can comment.</h3>
-	</div>
-  </script>
-  
-  <script type="text/ng-template" id="/register.html">
-	  <div class="page-header">
-	    <h1>Flapper News</h1>
-	  </div>
-	
-	  <div ng-show="error" class="alert alert-danger row">
-	    <span>{{ error.message }}</span>
-	  </div>
-	
-	  <form ng-submit="register()"
-	    style="margin-top:30px;">
-	    <h3>Register</h3>
-	
-	    <div class="form-group">
-	      <input type="text"
-	      class="form-control"
-	      placeholder="Username"
-	      ng-model="user.username"></input>
-	    </div>
-	    <div class="form-group">
-	      <input type="password"
-	      class="form-control"
-	      placeholder="Password"
-	      ng-model="user.password"></input>
-	    </div>
-	    <button type="submit" class="btn btn-primary">Register</button>
-	  </form>
-	</script>
-
-
-	<script type="text/ng-template" id="/login.html">
-	  <div class="page-header">
-	    <h1>Flapper News</h1>
-	  </div>
-	
-	  <div ng-show="error" class="alert alert-danger row">
-	    <span>{{ error.message }}</span>
-	  </div>
-	
-	  <form ng-submit="logIn()"
-	    style="margin-top:30px;">
-	    <h3>Log In</h3>
-	
-	    <div class="form-group">
-	      <input type="text"
-	      class="form-control"
-	      placeholder="Username"
-	      ng-model="user.username"></input>
-	    </div>
-	    <div class="form-group">
-	      <input type="password"
-	      class="form-control"
-	      placeholder="Password"
-	      ng-model="user.password"></input>
-	    </div>
-	    <button type="submit" class="btn btn-primary">Log In</button>
-	  </form>
-  </script>					  
-
-  </body>
 </html>

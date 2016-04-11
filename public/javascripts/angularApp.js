@@ -239,14 +239,23 @@ function($scope, posts, post, auth) {
 
 }]);
 
-app.controller('AuthCtrl', ['$scope', '$state', 'auth',
-function($scope, $state, auth) {
+app.controller('AuthCtrl', ['$scope', '$state', 'auth', 'posts', 
+function($scope, $state, auth, posts) {
 	$scope.user = {};
-
+    console.log(posts.posts);
 	$scope.register = function() {
+        console.log("name: "+ $scope.user.name);
+        
 		auth.register($scope.user).error(function(error) {
 			$scope.error = error;
 		}).then(function() {
+            posts.create({
+                name: $scope.user.name,
+			     position : $scope.user.position,
+                location:$scope.user.location,
+                desc: $scope.user.desc,
+                since: $scope.user.since
+        });
 			$state.go('home');
 		});
 	};
