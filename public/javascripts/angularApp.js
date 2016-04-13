@@ -232,7 +232,12 @@ function($scope, posts, post, auth) {
 	$scope.upvote = function(comment) {
 		posts.upvoteComment(post, comment);
 	};
-
+    $scope.upvotePost = function(post) {
+		//our post factory has an upvote() function in it
+		//we're just calling this using the post we have
+		console.log('Upvoting:' + post.title + "votes before:" + post.upvotes);
+		posts.upvote(post);
+	};
 	$scope.downvote = function(comment) {
 		posts.downvoteComment(post, comment);
 	};

@@ -48,7 +48,7 @@
                
                 <nav class="navbar-fixed flat grey lighten-4 purple-text" id="navBar">
                     <div class="row nav-wrapper">
-                        <a href="/" class="brand-logo purple-text text-darken-2 truncate" title="A curation of free, responsive Bootstrap themes">Rate <span class="grey-text text-lighten-1 hide-on-small-only">Me!</span></a>
+                        <a href="/" class="brand-logo purple-text text-darken-2 truncate" title="A curation of free, responsive Bootstrap themes">RateMy<span class="grey-text text-lighten-1 ">Rep!</span></a>
                         <a class="brand-logo center hide-on-med-and-down dropdown-button small-text purple-text" href="#" data-activates="themesMenu">The Best Source for Customer Service Feedback</a>
                         <a href="#" data-activates="mobile-nav" class="button-collapse black-text"><i class="mdi-navigation-menu"></i></a>
                         <ul class="right hide-on-med-and-down">
@@ -165,58 +165,61 @@
 
                 <div class="row">
 
-                    <div class="s12 col grey-text text-lighten-1">
-                        <p class="right">
+                    <div class="s12 col ">
+                  <p class="right">
+                  
+                <button class="btn btn-primary blue" ng-click="upvotePost(post)" >Reccomend {{post.upvotes}}  <i class="fa fa-thumbs-up " ></i></button>
 
-                            <!-- BootStrapZero Right Side 336x280 -->
-
-
-                        </p>
+                </p>
                         <h1>
 {{post.name}}                </h1>
                         <h6>
-{{post.position}}                </h6>
+{{post.position}} at {{post.location}}            </h6>
                     </div>
                     <div class="s12 col">
                         <div class="row">
                             <div class="l8 m12 s12 col">
                                 <div class="row">
                                     <div class="l4 m6 s12 col">
-                                        <p class="flow-text"><img alt="Profile Picture" src="https://thebenclark.files.wordpress.com/2014/03/facebook-default-no-profile-pic.jpg" class=" img-rounded responsive-img"></p>
+                                        <p class="flow-text"><img alt="Profile Picture" src="http://voxcura.com/wp/wp-content/uploads/2011/06/Natalia-Pic-profile-e1333318973427.jpg" class="responsive-img  img-thumbnail" style="border-radius:5px;"></p>
                                     </div>
                                     <div class="l8 m6 s12 col">
-                                        <p class="flow-text"> {{post.desc}}</p>
+                                        <p class="flow-text"> {{post.desc}} </p>
 
-                                        <br />
-
-                                        <h6>How'd you like me?</h6>
-
-                                        <div id="stars-default">
-                                            <input type=hidden name "rating"/>
-                                        </div>
-
-
-                                        <br />
+                            
 
                                     </div>
 
                                 </div>
-                                <div class="row">
-                                    <div class="l12 m12 s12 col">
 
-                                        <a class="waves-effect waves-light btn-large blue btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
-                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Gratitude</span>
-                                        </a>
-                                        <a class="waves-effect waves-light btn-large orange btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
-                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Commendation</span>
-                                        </a>
+                              <div class ="card " >
+                         <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin:30px;">
+                             <h6>Leave feedback for Jane </h6><p> Write a custom commendation below or choose from the dropdown!<a> <em>({{post.comments.length}})
+ Commendations left for {{post.name}}</em></a></p>
 
-                                        <a class="waves-effect waves-light btn-large red btn truncate" href="/link/0P5ioOrdK3" target="_ext" rel="nofollow" title="Find more details on this theme">
-                                            <i class="large mdi-hardware-keyboard-arrow-down right"></i> <span class="hide-on-med-and-down">Suggestion</span>
-                                        </a>
-
+                                    <div class="form-group form-warning">
+                                        <input type="text" class="form-control form-danger" placeholder="Comment" ng-model="body"></input>
                                     </div>
-                                </div>
+
+                                    <button type="submit" class="btn blue">Post</button>
+                                </form>
+                    </div>
+                                                    <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+
+                    <div class ="card " >
+                         <form  style="margin:30px;">
+                             <p><a>{{comment.author}}</a> ~<em> May 21, 2015</em></p>
+
+                                    <div class="form-group form-warning">
+                                        <input type="text" class="form-control form-danger" value={{comment.body}} style="color:black"  disabled="disabled"></input>
+                                    </div>
+
+                             <button class=" btn blue" ng-click="upvote(comment)"  >    <span > <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvotes  
+                                                          </span> </button>
+
+                                </form>
+                    </div>
+                    </div>
                                 <div class="row">
                                     <div class="l12 m12 s12 col center">
 
@@ -226,62 +229,34 @@
                                 <div>
                                     <br/>
                                 </div>
-                                <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
-                                    <span class="fa fa-thumbs-up" ng-click="upvote(comment)"></span> {{comment.upvotes}}
-                                    <span class="fa fa-thumbs-down" ng-click="downvote(comment)"></span> - by {{comment.author}}
-                                    <span style="font-size:20px; margin-left:10px;">
-        {{comment.body}}
-      </span>
-                                </div>
-
-                                <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin-top:30px;">
-                                    <h3>Add a new comment</h3>
-
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary">Post</button>
-                                </form>
+      
 
 
-
-                                <div class="clearfix"></div>
-                                <h6>Share the Love</h6>
-                                <share-buttons networks="['facebook','twitter','gplus','buffer','reddit']" screen-name="bootstrapzero" share-text="Elate One Page HTML5 Bootstrap template" popup="'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=340,width=750'"></share-buttons>
-                                <div class="clearfix"></div>
+                                
 
                             </div>
                             <div class="l4 m12 s12 col">
 
-                                <div class="card-panel flat">
-                                    <h6>Profile</h6>
-                                    <ul>
-
-                                        <li>
-                                            <div class="divider grey lighten-2"></div>
-                                        </li>
-                                        <li style="margin-top:10px;">
-                                            <i style="  display:inline-block; " class="inline-block small mdi-action-account-circle left"></i> <span class="" style="">Name: {{post.name}}</span>
-
-                                        </li>
-                                        <li>
-                                            <i class="small mdi-image-timelapse left"></i> <span class="" style="">Since: {{post.since}}</span>
-
-                                        </li>
-                                        <li>
-                                            <i class="small mdi-maps-location-history left"></i> <span class="" style="">Position {{post.position}}</span>
-
-                                        </li>
-                                        <li>
-                                            <i class="small mdi-maps-place left"></i> <span class="" style="">Location {{post.location}}</span>
-
-                                        </li>
-
-
-
-                                    </ul>
-                                </div>
+                                                <div class="card-panel flat">
+                <h6>Profile</h6>
+                <hr>
+                    
+                         <i  class=" small mdi-action-account-circle "></i> <span class="" style="">Name: {{post.name}}</span>
+ <div class="divider grey lighten-2"></div>              
+                                     
+                                     <i class="small mdi-image-timelapse "></i> <span class="" style="">Since: {{post.since}}</span>
+                        
+                     <div class="divider grey lighten-2"></div>
+                         <i class="small mdi-maps-location-history "></i> <span class="" style="">Position: {{post.position}}</span>
+                        
+                    <div class="divider grey lighten-2"></div>
+                         <i class="small mdi-maps-place "></i> <span class="" style="">Location: {{post.location}}</span>
+                        
+                   
+                    
+                  
+                    
+            </div>
                                 <div style="height:300px;width:650px;max-width:100%;list-style:none; transition: none;overflow:hidden;">
                                     <div id="gmap-display" style="height:100%; width:100%;max-width:100%;">
                                         <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Macy's,+Newpark+Mall,+Newark,+CA,+United+States&key=AIzaSyAN0om9mFmy1QN6Wf54tXAowK4eT0ZUPrU"></iframe>
