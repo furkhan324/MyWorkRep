@@ -192,7 +192,7 @@
 
                                 </div>
 
-                                <div class="card ">
+                                <div class="card flat ">
                                     <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin:30px;">
                                         <h6>Leave feedback for Jane </h6>
                                         <p> Write a custom commendation below or choose from the dropdown!
@@ -206,15 +206,15 @@
                                         </div>
 
                                         <button type="submit" class="btn blue">Post</button>
-                                        <strong style="color:red" ng-show="showError" > Need text to submit!</strong>
-                                         <strong style="color:green" ng-show="showSuccess" >Comment submitted below</strong>
+                                        <h6 style="color:red" ng-show="showError" > Need text to submit!</h6>
+                                         <h6 style="color:green" ng-show="showSuccess" >Comment submitted below</h6>
                                     </form>
                                 </div>
-                                <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+                                <div ng-repeat="comment in post.comments | orderBy:'-date'">
 
-                                    <div class="card ">
+                                    <div class="card flat">
                                         <form style="margin:30px;">
-                                            <p><a>{{comment.author}}</a> ~<em> May 21, 2015</em></p>
+                                            <p><a href="#/posts/{{comment.postid}}">{{comment.author}}</a> ~<em> {{comment.datef}}</em></p>
 
                                             <div class="form-group form-warning">
                                                 <input type="text" class="form-control form-danger" value={{comment.body}} style="color:black" disabled="disabled"></input>

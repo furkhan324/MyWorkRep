@@ -84,6 +84,14 @@ function($http, $window) {
 			return payload.username;
 		}
 	};
+    auth.payload = function() {
+		if (auth.isLoggedIn()) {
+			var token = auth.getToken();
+			var payload = JSON.parse($window.atob(token.split('.')[1]));
+        
+			return payload;
+		}
+	};
 
 	auth.register = function(user) {
         console.log('we got hee bro');
@@ -253,10 +261,14 @@ function($scope, posts, post, auth) {
             $scope.showError= true;
         
 		}else{
+            
         console.log("OOPS NOT SUPPOSED TO BE HERE");
 		posts.addComment(post._id, {
 			body : $scope.body,
-			author : 'user',
+			author : auth.payload().name,
+            date: Date.now(),
+            datef: (new Date()).toString(),
+            postid:auth.payload().postid,
             upvotedBy:[]
 		}).success(function(comment) {
 			$scope.post.comments.push(comment);
@@ -266,6 +278,7 @@ function($scope, posts, post, auth) {
 		});
 		$scope.body = ''; }
 	};
+    
 	$scope.upvote = function(comment) {
 		posts.upvoteComment(post, comment);
 	};
