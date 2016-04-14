@@ -45,7 +45,7 @@
         </ul>
         <div id="nav" class="grey lighten-4">
             <div class="container">
-               
+
                 <nav class="navbar-fixed flat grey lighten-4 purple-text" id="navBar">
                     <div class="row nav-wrapper">
                         <a href="/" class="brand-logo purple-text text-darken-2 truncate" title="A curation of free, responsive Bootstrap themes">RateMy<span class="grey-text text-lighten-1 ">Rep!</span></a>
@@ -72,7 +72,7 @@
                 </nav>
             </div>
         </div>
-        <nav class="container lighten-5 grey flat hide-on-med-and-down" id="navSearch">
+        <nav class="container lighten-5 grey flat " id="navSearch">
             <div class="row nav-wrapper">
                 <div class="s12 m4 l4 col">
                     <form class="" action="/l">
@@ -132,7 +132,7 @@
                                             <a href="" class="right activator"><i class="mdi-navigation-arrow-forward grey-text small"></i></a>
                                             <h6><a href="#/posts/{{post._id}}"  class="grey-text text-lighten-1">{{post.position}} @ {{post.location}}</a></h6>
                                         </div>
-                        
+
                                     </div>
                                     <!--/card-->
                                 </div>
@@ -166,11 +166,11 @@
                 <div class="row">
 
                     <div class="s12 col ">
-                  <p class="right">
-                  
-                <button class="btn btn-primary blue" ng-click="upvotePost(post)" >Reccomend {{post.upvotes}}  <i class="fa fa-thumbs-up " ></i></button>
-
-                </p>
+                        <p class="right">
+                    <!--     <button class="btn btn-primary blue"  ng-click="upvotePost(post)">Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> -->
+            <button class="btn btn-primary blue"  ng-show="showPostActive(post)" ng-click="upvotePostPersistent(post)">Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button>
+                      <button class="btn btn-primary blue" ng-hide="showPostActive(post)" disabled="disabled" >Reccomended {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> 
+                        </p>
                         <h1>
 {{post.name}}                </h1>
                         <h6>
@@ -186,40 +186,50 @@
                                     <div class="l8 m6 s12 col">
                                         <p class="flow-text"> {{post.desc}} </p>
 
-                            
+
 
                                     </div>
 
                                 </div>
 
-                              <div class ="card " >
-                         <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin:30px;">
-                             <h6>Leave feedback for Jane </h6><p> Write a custom commendation below or choose from the dropdown!<a> <em>({{post.comments.length}})
- Commendations left for {{post.name}}</em></a></p>
+                                <div class="card ">
+                                    <form ng-submit="addComment()" ng-show="isLoggedIn()" style="margin:30px;">
+                                        <h6>Leave feedback for Jane </h6>
+                                        <p> Write a custom commendation below or choose from the dropdown!
+                                            <a> <em>({{post.comments.length}})
+ Commendations left for {{post.name}}</em></a>
+                                        
+                                        </p>
 
-                                    <div class="form-group form-warning">
-                                        <input type="text" class="form-control form-danger" placeholder="Comment" ng-model="body"></input>
-                                    </div>
+                                        <div class="form-group form-warning">
+                                            <input type="text" class="form-control form-danger" placeholder="Comment" ng-model="body"></input>
+                                        </div>
 
-                                    <button type="submit" class="btn blue">Post</button>
-                                </form>
-                    </div>
-                                                    <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+                                        <button type="submit" class="btn blue">Post</button>
+                                        <strong style="color:red" ng-show="showError" > Need text to submit!</strong>
+                                         <strong style="color:green" ng-show="showSuccess" >Comment submitted below</strong>
+                                    </form>
+                                </div>
+                                <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
 
-                    <div class ="card " >
-                         <form  style="margin:30px;">
-                             <p><a>{{comment.author}}</a> ~<em> May 21, 2015</em></p>
+                                    <div class="card ">
+                                        <form style="margin:30px;">
+                                            <p><a>{{comment.author}}</a> ~<em> May 21, 2015</em></p>
 
-                                    <div class="form-group form-warning">
-                                        <input type="text" class="form-control form-danger" value={{comment.body}} style="color:black"  disabled="disabled"></input>
-                                    </div>
+                                            <div class="form-group form-warning">
+                                                <input type="text" class="form-control form-danger" value={{comment.body}} style="color:black" disabled="disabled"></input>
+                                            </div>
 
-                             <button class=" btn blue" ng-click="upvote(comment)"  >    <span > <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvotes  
+                                            <button class=" btn blue" ng-click="upvoteCommentPersistent(comment)" ng-show="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvotes  
+                                                          </span> </button>
+                                                          
+                                                          
+                                            <button class=" btn blue" disabled="disabled" ng-click="upvote(comment)" ng-hide="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvoted  
                                                           </span> </button>
 
-                                </form>
-                    </div>
-                    </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="l12 m12 s12 col center">
 
@@ -229,34 +239,34 @@
                                 <div>
                                     <br/>
                                 </div>
-      
 
 
-                                
+
+
 
                             </div>
                             <div class="l4 m12 s12 col">
 
-                                                <div class="card-panel flat">
-                <h6>Profile</h6>
-                <hr>
-                    
-                         <i  class=" small mdi-action-account-circle "></i> <span class="" style="">Name: {{post.name}}</span>
- <div class="divider grey lighten-2"></div>              
-                                     
-                                     <i class="small mdi-image-timelapse "></i> <span class="" style="">Since: {{post.since}}</span>
-                        
-                     <div class="divider grey lighten-2"></div>
-                         <i class="small mdi-maps-location-history "></i> <span class="" style="">Position: {{post.position}}</span>
-                        
-                    <div class="divider grey lighten-2"></div>
-                         <i class="small mdi-maps-place "></i> <span class="" style="">Location: {{post.location}}</span>
-                        
-                   
-                    
-                  
-                    
-            </div>
+                                <div class="card-panel flat">
+                                    <h6>Profile</h6>
+                                    <hr>
+
+                                    <i class=" small mdi-action-account-circle "></i> <span class="" style="">Name: {{post.name}}</span>
+                                    <div class="divider grey lighten-2"></div>
+
+                                    <i class="small mdi-image-timelapse "></i> <span class="" style="">Since: {{post.since}}</span>
+
+                                    <div class="divider grey lighten-2"></div>
+                                    <i class="small mdi-maps-location-history "></i> <span class="" style="">Position: {{post.position}}</span>
+
+                                    <div class="divider grey lighten-2"></div>
+                                    <i class="small mdi-maps-place "></i> <span class="" style="">Location: {{post.location}}</span>
+
+
+
+
+
+                                </div>
                                 <div style="height:300px;width:650px;max-width:100%;list-style:none; transition: none;overflow:hidden;">
                                     <div id="gmap-display" style="height:100%; width:100%;max-width:100%;">
                                         <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Macy's,+Newpark+Mall,+Newark,+CA,+United+States&key=AIzaSyAN0om9mFmy1QN6Wf54tXAowK4eT0ZUPrU"></iframe>
@@ -303,15 +313,14 @@
 
     <script type="text/ng-template" id="/register.html">
         <div class="page-header">
-          
+
         </div>
 
-        <div ng-show="error" class="alert alert-danger row">
-            <span>{{ error.message }}</span>
-        </div>
-
-        <form ng-submit="register()" style="margin-top:30px;">
-            <h3>Register</h3>
+        <div class ="row">
+            <div class="s12 m4 l4 col">
+            <div class="card flat" style="margin: 10px">
+        <form ng-submit="register()" style="margin:30px;">
+            <h3>Register</h3> <h6  ng-show ="showError2" style="color: red" >{{errorMessage}}</h6>
 
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" ng-model="user.username"></input>
@@ -337,21 +346,23 @@
             </div>
 
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn blue">Register</button>
         </form>
+        </div>
+        </div>
+        </div>
     </script>
 
 
     <script type="text/ng-template" id="/login.html">
         <div class="page-header">
         </div>
+            <div class ="row">
+            <div class="s12 m4 l4 col">
+            <div class="card flat" style="margin: 10px">
 
-        <div ng-show="error" class="alert alert-danger row">
-            <span>{{ error.message }}</span>
-        </div>
-
-        <form ng-submit="logIn()" style="margin-top:30px;">
-            <h3>Log In</h3>
+        <form ng-submit="logIn()" style="margin:30px;">
+            <h3>Log In</h3><h6  ng-show ="showError3" style="color: red" >{{errorMessage2}}</h6>
 
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" ng-model="user.username"></input>
@@ -359,8 +370,12 @@
             <div class="form-group">
                 <input type="password" class="form-control" placeholder="Password" ng-model="user.password"></input>
             </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
+            <button type="submit" class="btn btn-primary blue">Log In</button>
         </form>
+        
+    </div>
+    </div>
+    </div>
     </script>
 
     <footer class="container">

@@ -86,6 +86,7 @@ function($http, $window) {
 	};
 
 	auth.register = function(user) {
+        console.log('we got hee bro');
 		return $http.post('/register', user).success(function(data) {
 			auth.saveToken(data.token);
 		});
@@ -129,12 +130,23 @@ function($http, auth) {
 	};
 	
 	o.upvote = function(post) {
+        console.log(auth.currentUser()+' this is the current user');
 	  return $http.put('/posts/' + post._id + '/upvote', null, {
 	    headers: {Authorization: 'Bearer '+auth.getToken()}
 	  }).success(function(data){
 	    post.upvotes += 1;
 	  });
 	};
+    o.upvotePersistent = function(post) {
+	  return $http.put('/posts/' + post._id +'/'+auth.currentUser()+ '/upvote', null, {
+	    headers: {Authorization: 'Bearer '+auth.getToken()}
+	  }).success(function(data){
+          //data needs to be refreshed on both client and 
+	    post.upvotes += 1;
+        post.upvotedBy.push(auth.currentUser());
+	  });
+	};
+    
 	//downvotes
 	o.downvote = function(post) {
 	  return $http.put('/posts/' + post._id + '/downvote', null, {
@@ -167,6 +179,14 @@ function($http, auth) {
 	    comment.upvotes += 1;
 	  });
 	};	
+    o.upvoteCommentPersistent = function(post, comment) {
+	  return $http.put('/posts/' + post._id +'/'+auth.currentUser()+ '/comments/'+ comment._id + '/upvote', null, {
+	    headers: {Authorization: 'Bearer '+auth.getToken()}
+	  }).success(function(data){
+	    comment.upvotes += 1;
+          comment.upvotedBy.push(auth.currentUser());
+	  });
+	};
 	//downvote comments
 	//I should really consolidate these into one voteHandler function
 	o.downvoteComment = function(post, comment) {
@@ -186,6 +206,7 @@ function($scope, posts, auth) {
 	$scope.posts = posts.posts;
 	$scope.isLoggedIn = auth.isLoggedIn;
 	//setting title to blank here to prevent empty posts
+    
 	$scope.title = '';
 
 	$scope.addPost = function() {
@@ -215,32 +236,76 @@ function($scope, posts, auth) {
 app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
 function($scope, posts, post, auth) {
 	$scope.post = post;
+  
 	$scope.isLoggedIn = auth.isLoggedIn;
-
+    $scope.showError=false;
+    $scope.showSuccess=false;
 	$scope.addComment = function() {
-		if ($scope.body === '') {
-			return;
-		}
+        $scope.showError=false;
+    $scope.showSuccess=false;
+		if ($scope.body == '' || $scope.body==""||$scope.body===''||$scope.body==="") {
+            $scope.showError= true;
+        
+		}else{
+        console.log("OOPS NOT SUPPOSED TO BE HERE");
 		posts.addComment(post._id, {
 			body : $scope.body,
-			author : 'user'
+			author : 'user',
+            upvotedBy:[]
 		}).success(function(comment) {
 			$scope.post.comments.push(comment);
+            $scope.showSuccess =true;
+            
+            
 		});
-		$scope.body = '';
+		$scope.body = ''; }
 	};
 	$scope.upvote = function(comment) {
 		posts.upvoteComment(post, comment);
 	};
+    $scope.upvoteCommentPersistent = function(comment) {
+        console.log('upvote comment persistent was just called');
+        posts.upvoteCommentPersistent(post, comment);
+	};
+    
     $scope.upvotePost = function(post) {
 		//our post factory has an upvote() function in it
 		//we're just calling this using the post we have
 		console.log('Upvoting:' + post.title + "votes before:" + post.upvotes);
 		posts.upvote(post);
+       
+	};
+    $scope.upvotePostPersistent = function(post) {
+        console.log('upvote post persistent was just called');
+		console.log('Upvoting:' + post.title + "votes before:" + post.upvotes);
+		posts.upvotePersistent(post);
+     
 	};
 	$scope.downvote = function(comment) {
 		posts.downvoteComment(post, comment);
 	};
+    $scope.showCommentActive = function(comment){
+    if (comment.upvotedBy.indexOf(auth.currentUser())!=-1){ //or 'user'
+ 	  // console.log('the array contains the item, so you liked the comment  already');
+	   return 'false';
+	 }
+    else{
+ //	  console.log('nope not in the comment so you havent liked the comment before');
+        return 'true';
+    }
+    };
+    $scope.showPostActive = function(post){
+        console.log("the post's upvoted by array" + post.upvotedBy);
+        console.log(post.upvotedBy);
+    if (post.upvotedBy.indexOf(auth.currentUser())!=-1){ //or 'user'
+ 	   console.log('the array contains the item, so you liked the post already');
+	   return 'false';
+	 }
+    else{
+ 	  console.log('nope not in the array so you havent liked the post before');
+        return 'true';
+    }
+    }
 
 }]);
 
@@ -248,26 +313,54 @@ app.controller('AuthCtrl', ['$scope', '$state', 'auth', 'posts',
 function($scope, $state, auth, posts) {
 	$scope.user = {};
     console.log(posts.posts);
+    $scope.showError2 =false;
+    $scope.errorMessage ="";
+    $scope.showError3 =false;
+    $scope.errorMessage2 ="";
+
 	$scope.register = function() {
-        console.log("name: "+ $scope.user.name);
-        
+        //console.log("name: "+ $scope.user.name);
+        if(!$scope.user.name ||!$scope.user.position||!$scope.user.location||!$scope.user.desc||!$scope.user.since){
+                $scope.errorMessage ="Fields cannot be left blank";
+            console.log("ay nigga fields cant be left blank");
+            $scope.showError2=true;
+            return;
+
+            }
 		auth.register($scope.user).error(function(error) {
 			$scope.error = error;
+            console.log(error);
+            $scope.showError2=true;
+            if(error.message==='bad password'){
+                $scope.errorMessage ="Invalid password choice";
+            }if(error.message==='bad username'){
+                $scope.errorMessage ="Invalid username choice";
+            }if(error.message==='username taken'){
+                $scope.errorMessage ="Username is taken";
+            }
+            
 		}).then(function() {
             posts.create({
                 name: $scope.user.name,
-			     position : $scope.user.position,
+			    position : $scope.user.position,
                 location:$scope.user.location,
                 desc: $scope.user.desc,
-                since: $scope.user.since
+                since: $scope.user.since,
+                upvotedBy:[]
+
         });
 			$state.go('home');
 		});
 	};
 
 	$scope.logIn = function() {
+        
 		auth.logIn($scope.user).error(function(error) {
 			$scope.error = error;
+            $scope.showError3=true;
+            $scope.errorMessage2 =error.message;
+
+
 		}).then(function() {
 			$state.go('home');
 		});

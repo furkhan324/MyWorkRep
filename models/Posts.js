@@ -9,7 +9,8 @@ var PostSchema = new mongoose.Schema({
     location:String,
     position:String,
     since:String,
-    desc:String
+    desc:String,
+    upvotedBy:[String]
     
 });
 
@@ -17,6 +18,13 @@ PostSchema.methods.upvote = function(cb) {
   this.upvotes += 1;
   this.save(cb);
 };
+
+PostSchema.methods.upvotePersistent = function(cb, username) {
+  this.upvotes += 1;
+this.upvotedBy.push(username);
+  this.save(cb);
+};
+
 
 PostSchema.methods.downvote = function (cb) {
   this.upvotes -= 1;
