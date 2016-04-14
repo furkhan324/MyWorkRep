@@ -80,7 +80,7 @@ function($http, $window) {
 		if (auth.isLoggedIn()) {
 			var token = auth.getToken();
 			var payload = JSON.parse($window.atob(token.split('.')[1]));
-
+            console.log(payload);
 			return payload.username;
 		}
 	};
@@ -121,10 +121,16 @@ function($http, auth) {
 	//when $http gets a success back, it adds this post to the posts object in
 	//this local factory, so the mongodb and angular data is the same
 	//sweet!
-	o.create = function(post) {
+	o.create = function(post,user) {
 	  return $http.post('/posts', post, {
 	    headers: {Authorization: 'Bearer '+auth.getToken()}
 	  }).success(function(data){
+          user.somefield=data;
+          console.log(user);
+          console.log("Ok heres my user post" +data);
+          $http.post('/addID/'+data._id, user).success(function(data2) {
+			auth.saveToken(data2.token);
+		});
 	    o.posts.push(data);
 	  });
 	};
@@ -236,14 +242,14 @@ function($scope, posts, auth) {
 app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
 function($scope, posts, post, auth) {
 	$scope.post = post;
-  
+    console.log(post);
 	$scope.isLoggedIn = auth.isLoggedIn;
     $scope.showError=false;
     $scope.showSuccess=false;
 	$scope.addComment = function() {
         $scope.showError=false;
     $scope.showSuccess=false;
-		if ($scope.body == '' || $scope.body==""||$scope.body===''||$scope.body==="") {
+		if (!$scope.body) {
             $scope.showError= true;
         
 		}else{
@@ -322,7 +328,6 @@ function($scope, $state, auth, posts) {
         //console.log("name: "+ $scope.user.name);
         if(!$scope.user.name ||!$scope.user.position||!$scope.user.location||!$scope.user.desc||!$scope.user.since){
                 $scope.errorMessage ="Fields cannot be left blank";
-            console.log("ay nigga fields cant be left blank");
             $scope.showError2=true;
             return;
 
@@ -348,8 +353,8 @@ function($scope, $state, auth, posts) {
                 since: $scope.user.since,
                 upvotedBy:[]
 
-        });
-			$state.go('home');
+        },$scope.user);
+			//$state.go('home');
 		});
 	};
 

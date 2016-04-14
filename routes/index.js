@@ -81,6 +81,13 @@ router.param('username', function (req, res, next, id) {
     return next();
 
 });
+router.param('id2', function (req, res, next, id) {
+    //id carries the value sent in as a parameter
+
+    req.id2 = id;
+    return next();
+
+});
 
 router.get('/posts/:post', function (req, res, next) {
     req.post.populate('comments', function (err, post) {
@@ -186,7 +193,12 @@ router.post('/register', function (req, res, next) {
     var user = new User();
 
     user.username = req.body.username;
-
+    user.name=req.body.name;
+    user.position=req.body.position;
+    user.location=req.body.location;
+    user.desc=req.body.desc;
+    user.since=req.body.since;
+    
     user.setPassword(req.body.password)
     console.log("got to this point2");
     user.save(function (err) {
@@ -207,6 +219,26 @@ router.post('/register', function (req, res, next) {
     });
 });
 
+router.post('/addID/:id2', function (req, res, next) {
+   
+    passport.authenticate('local', function (err, user, info) {
+            console.log(req.id2);
+
+        if (err) {
+return res.status(400).json({
+            message: 'Invalid username or password'
+        });        }
+
+        if (user) {
+            user.setuserid(req.id2);
+            return res.json({
+                token: user.generateJWT()
+            });
+        } else {
+            return res.status(401).json(info);
+        }
+    })(req, res, next);
+}); 
 router.post('/login', function (req, res, next) {
     if (!req.body.username || !req.body.password) {
         return res.status(400).json({
