@@ -1,5 +1,7 @@
 var app = angular.module('flapperNews', ['ui.router']);
 
+
+     
 app.config(['$stateProvider', '$urlRouterProvider',
 function($stateProvider, $urlRouterProvider) {
 
@@ -80,7 +82,7 @@ function($http, $window) {
 		if (auth.isLoggedIn()) {
 			var token = auth.getToken();
 			var payload = JSON.parse($window.atob(token.split('.')[1]));
-            console.log(payload);
+          //  console.log(payload);
 			return payload.username;
 		}
 	};
@@ -217,12 +219,47 @@ function($http, auth) {
 
 app.controller('MainCtrl', ['$scope', 'posts', 'auth',
 function($scope, posts, auth) {
+    $scope.isLoggedIn = auth.isLoggedIn;
+	$scope.currentUser = auth.currentUser();
+	$scope.logOut = auth.logOut;
 	$scope.posts = posts.posts;
 	$scope.isLoggedIn = auth.isLoggedIn;
+	$scope.searchType = '';
+	$scope.select = {
+		value1: "Option1",
+        value2: "I'm an option",
+        choices: ["Option1", "I'm an option", "This is materialize", "No, this is Patrick."]
+	}
 	//setting title to blank here to prevent empty posts
     
 	$scope.title = '';
+    
+    String.prototype.hashCode = function(){
+    if (Array.prototype.reduce){
+        return this.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+    } 
+    var hash = 0;
+    if (this.length === 0) return hash;
+    for (var i = 0; i < this.length; i++) {
+        var character  = this.charCodeAt(i);
+        hash  = ((hash<<5)-hash)+character;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
 
+    $scope.color = function(post){
+                 console.log("we called findcolor");
+
+        var hash = new String(post.name).hashCode();
+        var lastc = hash.toString().slice(-1);
+        var arrayofcolors = ["#0091ea","#00b0ff", "40c4ff", "#80d8ff", "#01579b", "#0277bd","#0288d1", "#039be5", "#03a9f4", "#29b6f6 "];
+        console.log("we called findcolor");
+        return "background-color:"+arrayofcolors[lastc]+";border:none;outline:none;";
+        
+        
+    }
+    
 	$scope.addPost = function() {
 		if ($scope.title === '') {
 			return;
@@ -237,6 +274,7 @@ function($scope, posts, auth) {
 	};
 
 	$scope.upvote = function(post) {
+
 		//our post factory has an upvote() function in it
 		//we're just calling this using the post we have
 		console.log('Upvoting:' + post.title + "votes before:" + post.upvotes);
@@ -249,22 +287,27 @@ function($scope, posts, auth) {
 
 app.controller('PostsCtrl', ['$scope', 'posts', 'post', 'auth',
 function($scope, posts, post, auth) {
+  $scope.model={};
+    $scope.model.body="";
 	$scope.post = post;
     console.log(post);
 	$scope.isLoggedIn = auth.isLoggedIn;
     $scope.showError=false;
     $scope.showSuccess=false;
 	$scope.addComment = function() {
+                console.log(document.getElementById('sensorText').value);
+
         $scope.showError=false;
     $scope.showSuccess=false;
-		if (!$scope.body) {
+		if (!document.getElementById('sensorText').value) {
+            console.log(document.getElementById('sensorText').value);
             $scope.showError= true;
         
 		}else{
             
         console.log("OOPS NOT SUPPOSED TO BE HERE");
 		posts.addComment(post._id, {
-			body : $scope.body,
+			body : document.getElementById('sensorText').value,
 			author : auth.payload().name,
             date: Date.now(),
             datef: (new Date()).toString(),
@@ -276,7 +319,7 @@ function($scope, posts, post, auth) {
             
             
 		});
-		$scope.body = ''; }
+		document.getElementById('sensorText').value = ''; }
 	};
     
 	$scope.upvote = function(comment) {
@@ -313,21 +356,55 @@ function($scope, posts, post, auth) {
         return 'true';
     }
     };
+     $scope.setupmap=function(post){
+        console.log("set up map was called");
+          console.log(document.getElementById('map'));
+         initMap(post);
+         return true;
+    }
+
     $scope.showPostActive = function(post){
-        console.log("the post's upvoted by array" + post.upvotedBy);
-        console.log(post.upvotedBy);
+      //  console.log("the post's upvoted by array" + post.upvotedBy);
+  //      console.log(post.upvotedBy);
     if (post.upvotedBy.indexOf(auth.currentUser())!=-1){ //or 'user'
- 	   console.log('the array contains the item, so you liked the post already');
+ 	 //  console.log('the array contains the item, so you liked the post already');
 	   return 'false';
 	 }
     else{
- 	  console.log('nope not in the array so you havent liked the post before');
+ 	//  console.log('nope not in the array so you havent liked the post before');
         return 'true';
     }
     }
 
 }]);
+function initMap(post) {
+          console.log("was this even called");
+          console.log(document.getElementById('map'));
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: -34.397, lng: 150.644}
+        });
+                  console.log(map);
 
+        var geocoder = new google.maps.Geocoder();
+geocodeAddress(geocoder,map,post);
+      }
+
+      function geocodeAddress(geocoder, resultsMap,post) {
+        var address = post.location;
+          console.log(post.location);
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            resultsMap.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            console.log('Geocode was not successful for the following reason: ' + status);
+          }
+        });
+      }
 app.controller('AuthCtrl', ['$scope', '$state', 'auth', 'posts', 
 function($scope, $state, auth, posts) {
 	$scope.user = {};
@@ -336,7 +413,8 @@ function($scope, $state, auth, posts) {
     $scope.errorMessage ="";
     $scope.showError3 =false;
     $scope.errorMessage2 ="";
-
+    
+   
 	$scope.register = function() {
         //console.log("name: "+ $scope.user.name);
         if(!$scope.user.name ||!$scope.user.position||!$scope.user.location||!$scope.user.desc||!$scope.user.since){
@@ -367,7 +445,7 @@ function($scope, $state, auth, posts) {
                 upvotedBy:[]
 
         },$scope.user);
-			//$state.go('home');
+			$state.go('home');
 		});
 	};
 

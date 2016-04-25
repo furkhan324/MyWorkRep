@@ -1,16 +1,21 @@
 <html>
 
 <head>
-    <title>RateMyRep</title>
+    <title>MyWorkRep</title>
 
     <link href="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css" rel="stylesheet" />
     <link href="http://www.bootstrapzero.com/css/styles.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Nunito:700,400,300' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" />
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
     <script src="javascripts/angularApp.js"></script>
     <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Paytone+One' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
         .glyphicon-thumbs-up {
@@ -18,6 +23,9 @@
         }
     </style>
 </head>
+    <script>$(document).ready(function() { 
+  $('.modal-trigger').leanModal();
+});</script>
 
 <body ng-app="flapperNews" class="grey lighten-4">
     <!--
@@ -34,50 +42,119 @@
 
 
 
-    <div ng-controller="NavCtrl">
-        <ul class="side-nav" id="mobile-nav">
-            <li><a href="#"><i class="mdi-navigation-more-horiz medium"></i></a></li>
-            <li><a href="/">Home</a></li>
-            <li><a href="/bootstrap-templates">Votes</a></li>
-            <li><a href="/user">Profile</a></li>
-            <li><a class="modal-trigger" href="#modalContact">Contact</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-        <div id="nav" class="grey lighten-4">
-            <div class="container">
+   <div ng-controller="NavCtrl">
+    <ul class="side-nav" id="mobile-nav">
+        <li><a href="#"><i class="mdi-navigation-more-horiz medium"></i></a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/bootstrap-templates">Votes</a></li>
+        <li><a href="/user">Profile</a></li>
+        <li><a class="modal-trigger" href="#modalContact">Contact</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+    <ul class="side-nav fixed" id="slide-out">
+        <li><a href="#"><i class="mdi-navigation-more-horiz medium"></i></a></li>
+        <li ng-show="isLoggedIn()"><a><strong>Hi, {{ currentUser() }}</strong></a></li>
+        <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()"><strong>Log Out</strong></a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+        <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/bootstrap-templates">Votes</a></li>
+        <li><a href="/user">Profile</a></li>
+        <li><a class="modal-trigger" href="#modalContact">Contact</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+    <div id="nav" class="blue ">
+        <div class="navbar-fixed blue">
+            <nav class="  blue  purple-text" id="navBar">
+                <div class="row nav-wrapper blue">
+                    <a class=" left hide-on-med-and-down dropdown-button" href="#!" data-activates="slide-out" class="purple-text"><i class="mdi-navigation-menu"></i></a>
+                    
+                    <a href="#" data-activates="mobile-nav" class="button-collapse white-text"><i class="mdi-navigation-menu"></i></a>
+                    
+                    <a class="brand-logo center hide-on-med-and-down dropdown-button small-text white-text" href="#" data-activates="themesMenu">Building Real Reputations</a>
+                    
+                    <a href="/" class=" right brand-logo white-text text-darken-2 truncate" title="" >MyWork<span class="white-text text-lighten-1 ">Rep</span></a>
 
-                <nav class="navbar-fixed flat grey lighten-4 purple-text" id="navBar">
-                    <div class="row nav-wrapper">
-                        <a href="/" class="brand-logo purple-text text-darken-2 truncate" title="A curation of free, responsive Bootstrap themes">RateMy<span class="grey-text text-lighten-1 ">Rep!</span></a>
-                        <a class="brand-logo center hide-on-med-and-down dropdown-button small-text purple-text" href="#" data-activates="themesMenu">The Best Source for Customer Service Feedback</a>
-                        <a href="#" data-activates="mobile-nav" class="button-collapse black-text"><i class="mdi-navigation-menu"></i></a>
-                        <ul class="right hide-on-med-and-down">
+                    <ul id="dropdownUser" class="dropdown-content">
+                        
 
-                            <li>
-                                <a class="dropdown-button" href="#!" data-activates="dropdownUser"> <img alt="profile image" class="favicon" src="http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png" title="furkhan324" /> </a>
-                            </li>
+                    </ul>
 
-                            <li><a href="#" data-activates="mobile-nav" class="purple-text"><i class="mdi-navigation-menu"></i></a></li>
-                        </ul>
-
-                        <ul id="dropdownUser" class="dropdown-content">
-                            <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
-                            <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
-                            <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
-                            <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
-
-                        </ul>
-
-                    </div>
-                </nav>
-            </div>
+                </div>
+            </nav>
         </div>
-        <nav class="container lighten-5 grey flat " id="navSearch">
+    </div>
+        
+</div>
+
+
+    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
+
+    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
+
+
+
+
+    <div class="row harimain">
+        <div class="col-md-6 col-md-offset-3">
+            <ui-view></ui-view>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="/home.html">
+     <div class="container style="margin-top:15px"">
+             <div class ="row">
+                 <div class ="col s12 m12 l12 card">
+          <h1 class="header center">MyWorkRep</h1>
+          <div class='row center'>
+            <h4 class ="header col s12 light center">Build your reputation through MyWorkRep!</h4>
+          </div>
+          <div class="row center">
+            <a href="../#/register" ng-hide="isLoggedIn()" id="download-button" class="btn-large waves-effect blue waves-light">Sign Up</a>
+            <a href="../#/login" id="download-button" ng-hide="isLoggedIn()"  class="btn-large waves-effect blue waves-light">Log In</a>
+            <a href="../#" id="download-button" ng-show="isLoggedIn()"  class="btn-large waves-effect blue waves-light">Welcome {{currentUser}}</a>
+
+          </div>
+         
+          <br>
+                    <div class="row">
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons large blue-text">person_pin</i>
+                <h6 class="promo-caption">Professional Reputation</h6>
+              <p class="light center">Develop a real reputation with endorsements and reccomendations from real people.</p>
+              </div>
+            </div>
+
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons large blue-text">group</i>
+                <h6 class="promo-caption">Join the MyWorkRep community!</h6>
+                      <p class="light center">Be a part of the MyWorkRep community and grow your network.</p>
+
+              </div>
+            </div>
+
+            <div class="col s12 m4">
+              <div class="center promo">
+                <i class="material-icons large blue-text">comment</i>
+                <h6 class="promo-caption">Get custom feedback and reccomendations!</h6>
+  <p class="light center">Be a part of the MyWorkRep community and grow your network.</p>
+              </div>
+            </div>
+          </div>
+                 </div></div>
+        </div>
+    
+
+         <div id="main" class="" ng-controller="MainCtrl">
+     <nav class=" container lighten-5 grey  " style="margin-top:10px" id="navSearch">
             <div class="row nav-wrapper">
                 <div class="s12 m4 l4 col">
+             
                     <form class="" action="/l">
                         <div class="input-field" title="Search away...">
-                            <input id="q" name="q" type="search" required="" autofocus placeholder=" Search " class="validate">
+                            <input id="q" name="q" type="search" required="" autofocus placeholder=" Search " class="validate" ng-model="searchType">
                             <label for="q"><a href onclick="document.forms[0].submit();return false;"><i class="mdi-action-search grey-text text-lighten-2"></i></a></label>
                             <i class="mdi-navigation-close"></i>
                         </div>
@@ -90,25 +167,6 @@
                 </div>
             </div>
         </nav>
-    </div>
-
-
-    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
-
-    <!--- END OF NAVIGATION IN THE CODEEEEEEEEE -->
-
-
-
-
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <ui-view></ui-view>
-        </div>
-    </div>
-
-    <script type="text/ng-template" id="/home.html">
-
-        <div id="main" class="">
             <div class="container">
 
 
@@ -117,13 +175,13 @@
                         <div id="featured"></div>
                         <div class="row">
 
-                            <div ng-repeat="post in posts | orderBy: '-upvotes'">
+                            <div ng-repeat="post in posts | orderBy: '-upvotes' | filter:searchType">
 
 
-                                <div class="col s8 m4 l3 animated fadeInUp" style="-webkit-animation-duration:0ms">
+                                <div class="col s12 m4 l3 animated fadeInUp" style="-webkit-animation-duration:0ms">
                                     <div class="card flat small">
-                                        <div class="card-image white darken-1">
-                                            <a href="#/posts/{{post._id}}"><img alt="" src="http://image.slidesharecdn.com/22flatbackgroundcolors-140206091312-phpapp01/95/22-flat-background-colors-for-your-presentation-ppt-template-6-638.jpg?cb=1393600937"></a>
+                                        <div class="card-image  darken-1" style="{{color(post)}}">
+     
                                         </div>
                                         <div class="card-content white">
                                             <div class="card-title truncate">
@@ -160,19 +218,40 @@
     </script>
 
     <script type="text/ng-template" id="/posts.html">
-        <div id="main" class="">
+
+         <div id="main" class="" ng-controller="MainCtrl">
+        <nav class=" container lighten-5 grey  " style="margin-top:20px" id="navSearch">
+            <div class="row nav-wrapper">
+                <div class="s12 m4 l4 col">
+                    <form class="" action="/l">
+                        <div class="input-field" title="Search away...">
+                            <input id="q" name="q" type="search" required="" autofocus placeholder=" Search " class="validate" ng-model="searchType">
+                            <label for="q"><a href onclick="document.forms[0].submit();return false;"><i class="mdi-action-search grey-text text-lighten-2"></i></a></label>
+                            <i class="mdi-navigation-close"></i>
+                        </div>
+                    </form>
+                </div>
+                <div class="s12 m8 l8 col right-align">
+                    <p class="purple-text">
+
+                    </p>
+                </div>
+            </div>
+        </nav>
             <div class="container">
 
                 <div class="row">
 
                     <div class="s12 col ">
                         <p class="right">
-                    <!--     <button class="btn btn-primary blue"  ng-click="upvotePost(post)">Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> -->
-            <button class="btn btn-primary blue"  ng-show="showPostActive(post)" ng-click="upvotePostPersistent(post)">Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button>
-                      <button class="btn btn-primary blue" ng-hide="showPostActive(post)" disabled="disabled" >Reccomended {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> 
+                    <!--     <button class="btn btn-large btn-primary blue"  ng-click="upvotePostPersistent(post)" data-target="modal1" >Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> -->
+            <button class="btn btn-primary btn-large waves-effect waves-light blue"  ng-show="showPostActive(post)" ng-click="upvotePostPersistent(post)">Reccomend {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button>
+           
+                      <button class="btn btn-primary btn-large blue" ng-hide="showPostActive(post)" disabled="disabled" >Reccomended {{post.upvotes}} <i class="fa fa-thumbs-up "></i></button> 
                         </p>
                         <h1>
 {{post.name}}                </h1>
+
                         <h6>
 {{post.position}} at {{post.location}}            </h6>
                     </div>
@@ -181,7 +260,7 @@
                             <div class="l8 m12 s12 col">
                                 <div class="row">
                                     <div class="l4 m6 s12 col">
-                                        <p class="flow-text"><img alt="Profile Picture" src="http://voxcura.com/wp/wp-content/uploads/2011/06/Natalia-Pic-profile-e1333318973427.jpg" class="responsive-img  img-thumbnail" style="border-radius:5px;"></p>
+                                        <p class="flow-text"><img alt="Profile Picture" src="https://s.ytimg.com/yts/img/avatar_720-vflYJnzBZ.png" class="responsive-img  img-thumbnail" style="border-radius:5px;"></p>
                                     </div>
                                     <div class="l8 m6 s12 col">
                                         <p class="flow-text"> {{post.desc}} </p>
@@ -201,16 +280,26 @@
                                         
                                         </p>
 
-                                        <div class="form-group form-warning">
-                                            <input type="text" class="form-control form-danger" placeholder="Comment" ng-model="body"></input>
-                                        </div>
+                                                  <div class="form-group form-warning">
+                                        
+                                        <input type="text" value=""  name= "populateme" id="sensorText"  class="form-control form-danger fuckingshit2" placeholder="Comment" ng-model="model.body"></input>
+                                       
+                                        <select id="sensor" onchange="updateText('sensor')"class= "fuckingshit browser-default"  name="selector">
+                                            <option selected="selected" value="">Commendations</option>
+                                            <option  value="Thanks!">Thanks!</option>
+                                            <option value="Great work!">Great work!</option>
+                                        </select>
+                                         
+                                    </div>
+
 
                                         <button type="submit" class="btn blue">Post</button>
+      
                                         <h6 style="color:red" ng-show="showError" > Need text to submit!</h6>
                                          <h6 style="color:green" ng-show="showSuccess" >Comment submitted below</h6>
                                     </form>
                                 </div>
-                                <div ng-repeat="comment in post.comments | orderBy:'-date'">
+                                <div ng-repeat="comment in post.comments | orderBy:'-date' | filter:searchType">
 
                                     <div class="card flat">
                                         <form style="margin:30px;">
@@ -220,13 +309,20 @@
                                                 <input type="text" class="form-control form-danger" value={{comment.body}} style="color:black" disabled="disabled"></input>
                                             </div>
 
-                                            <button class=" btn blue" ng-click="upvoteCommentPersistent(comment)" ng-show="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvotes  
-                                                          </span> </button>
+                                            <button class=" btn btn-floating blue btn-small flat
+                                            " ng-click="upvoteCommentPersistent(comment)" ng-show="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up fa-small fa-sm " ></i>   
+                                                          </span> </button> 
                                                           
-                                                          
-                                            <button class=" btn blue" disabled="disabled" ng-click="upvote(comment)" ng-hide="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up " ></i>   {{comment.upvotes}}  Upvoted  
+                                                     <button class=" btn blue btn-small btn-floating btn-flat " disabled="disabled" ng-click="upvote(comment)" ng-hide="showCommentActive(comment)"> <span> <i  class="fa fa-thumbs-up fa-small fa-sm" ></i>   
                                                           </span> </button>
+        
+                                                       
+                                                     <em>     {{comment.upvotes}}  Upvotes  </em>
+                                                          
 
+                                                          
+                                                          
+                                         
                                         </form>
                                     </div>
                                 </div>
@@ -267,16 +363,9 @@
 
 
                                 </div>
-                                <div style="height:300px;width:650px;max-width:100%;list-style:none; transition: none;overflow:hidden;">
-                                    <div id="gmap-display" style="height:100%; width:100%;max-width:100%;">
-                                        <iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=Macy's,+Newpark+Mall,+Newark,+CA,+United+States&key=AIzaSyAN0om9mFmy1QN6Wf54tXAowK4eT0ZUPrU"></iframe>
-                                    </div><a class="code-for-google-map" href="https://www.interserver-coupons.com" id="inject-map-data">InterserverCoupons</a>
-                                    <style>
-                                        #gmap-display img {
-                                            max-width: none!important;
-                                            background: none!important;
-                                        }
-                                    </style>
+                                <div class="card" style="width:200%;max-width:100%;list-style:none; transition: none;overflow:hidden;">
+                                        <div ng-show="setupmap(post)" id="map" style="height:300px;width:650px;"></div>
+
                                 </div>
 
 
@@ -316,11 +405,11 @@
 
         </div>
 
-        <div class ="row">
-            <div class="s12 m4 l4 col">
-            <div class="card flat" style="margin: 10px">
+        <div class ="row ">
+            <div class="offset-l4 s4 m4 l4 col ">
+            <div class="card flat center" style="margin: 10px">
         <form ng-submit="register()" style="margin:30px;">
-            <h3>Register</h3> <h6  ng-show ="showError2" style="color: red" >{{errorMessage}}</h6>
+            <h3>Register</h3> <h6>Join the community!</h6><h6  ng-show ="showError2" style="color: red" >{{errorMessage}}</h6>
 
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" ng-model="user.username"></input>
@@ -355,10 +444,15 @@
 
 
     <script type="text/ng-template" id="/login.html">
+   
+ 
         <div class="page-header">
         </div>
             <div class ="row">
-            <div class="s12 m4 l4 col">
+            <div class="s1 m1 l1 col center">
+            
+            </div>
+            <div class="offset-l4 s4 m4 l4 col ">
             <div class="card flat" style="margin: 10px">
 
         <form ng-submit="logIn()" style="margin:30px;">
@@ -377,7 +471,12 @@
     </div>
     </div>
     </script>
-
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpBms2EURXyDSwcv9kbhapdQclvu6fXSk">
+    </script> 
+    <script>
+      
+    </script>
     <footer class="container">
         <div class="row grey-text text-lighten-2">
             <div class="s12 m6 l3 col">
@@ -424,7 +523,37 @@
             </div>
         </div>
     </div>
+      <!-- Modal Structure -->
+      <button data-target="modal1" class="btn modal-trigger">Modal</button>
 
+<div id="modal1" class="modal bottom-sheet">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+  
+ <script>
+     $(document).ready(function() {
+    // Select - Single
+        $('select').material_select();
+        window.updateText = function(type) { 
+ var id = type+'Text';
+ document.getElementById(id).value = document.getElementById(type).value;
+}
+$('.button-collapse').sideNav({
+      menuWidth: 200,
+      edge: 'left', // Default is 240
+      closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+    }
+  );
+  $('.collapsible').collapsible();
+
+});
+  </script>
 </body>
 
 </html>
